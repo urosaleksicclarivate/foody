@@ -10,19 +10,37 @@ interface Props{
     salad:string,
     bread:boolean,
     leftBy:string
-
 }
 
-const data:Props[]=[
-    {id:"prvi",kitchen:"Milankovic",mainDish:"Burger",soup:"Pileca supa",salad:"Vitaminska",bread:true,leftBy:"Uros Aleksic"},
-    {id:"drugi",kitchen:"Milankovic",mainDish:"TEST",soup:"Pileca supa TEST",salad:"TEst saalata",bread:false,leftBy:"Petar Petrovic"},
-]
-const Table=()=>{
+
+interface Lunch{
+    id:string,
+    kitchen:string,
+    mainDish:string,
+    soup:string,
+    salad:string,
+    bread:boolean
+    handleReserve?:(id:string)=>void
+    leftBy?:string
+    onChange?:()=>{}
+}
 
 
-    const handleReserve=(id:string)=>{
-        console.log("Item koji treba biti rezervisan je: ",id);
-    }
+
+
+
+
+interface TableProps{
+    lunches:Lunch[],
+    handleReserve?:()=>void
+    onChange?:()=>void
+}
+
+
+const Table=(props:TableProps)=>{
+
+
+  
 
 
     return(
@@ -30,18 +48,21 @@ const Table=()=>{
         <table>
             <thead>
                 <tr>
+                    {props.onChange && <th>select</th>}
                     <th>Kitchen</th>
                     <th>Lunch</th>
                     <th>Soup</th>
                     <th>Salad</th>
                     <th>Bread</th>
-                    <th>Reserve</th>
-                    <th>Left By:</th>
+                    {props.handleReserve && <th>Reserve</th>}
+                    {props.lunches[0].leftBy && <th>Left by:</th>}
                 </tr>
             </thead>
             <tbody>
-                {data.map((lun,index)=>{
-                    return <Lunch key={index} {...lun} handleReserve={handleReserve}/>
+                {props.lunches.map((lun,index)=>{
+                    return <Lunch key={index} {...lun} 
+                    handleReserve={props?.handleReserve} 
+                    onChange={props?.onChange}/>
                 })}
             </tbody>
         </table>
